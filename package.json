@@ -1,0 +1,16 @@
+{
+  "name": "nanosts-imports-transpiler",
+  "version": "0.0.1",
+  "description": "A compiler plugin for tstl to make NanosWorld imports work",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc index.ts --outDir dist/ --module node16",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^4.8.3",
+    "typescript-to-lua": "^1.10.0"
+  }
+}

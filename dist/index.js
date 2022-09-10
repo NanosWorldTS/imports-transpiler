@@ -43,7 +43,7 @@ const plugin = {
             // TODO: Handle index.ts being stripped from the import path
             const targetModulePath = identifier + ".lua";
             // List all the imports done
-            const defaultBinding = node.importClause.name;
+            const defaultBinding = node.importClause?.name;
             const namedBindings = node.importClause?.namedBindings?.elements;
             // Build internal transpiller representation
             const nodeRepr = {
@@ -69,7 +69,7 @@ const plugin = {
                 if (!moduleImportClause)
                     return;
                 return tstl.createVariableDeclarationStatement(tstl.createIdentifier(moduleImportClause.importVarName), tstl.createIdentifier(importMapName + "." + moduleImportClause.exportedName));
-            }).reduce((acc, v) => v ? [...acc, v] : acc, []);
+            })?.reduce((acc, v) => v ? [...acc, v] : acc, []);
             // console.log("Final ", finalNamedImportsVariables)
             return [packageRequireAssignToImportMap, ...finalNamedImportsVariables];
         },

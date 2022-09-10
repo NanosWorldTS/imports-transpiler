@@ -1,6 +1,7 @@
 
 import * as ts from "typescript";
 import * as tstl from "typescript-to-lua";
+import {VariableDeclarationStatement} from "typescript-to-lua";
 //@ts-ignore
 console.log("Imports transpiller starting");
 
@@ -33,7 +34,7 @@ const plugin: tstl.Plugin = {
             const targetModulePath = identifier + ".lua";
 
             // List all the imports done
-            const defaultBinding = node.importClause.name;
+            const defaultBinding = node.importClause?.name;
             const namedBindings = (node.importClause?.namedBindings as any)?.elements
 
             // Build internal transpiller representation
@@ -42,7 +43,7 @@ const plugin: tstl.Plugin = {
                     exportedName: 'default',
                     importVarName: defaultBinding?.getText()
                 } : undefined,
-                namedImports: namedBindings?.map((chNode) => {
+                namedImports: namedBindings?.map((chNode: any) => {
                     const named =  chNode.getText()
                     return {
                         exportedName: named,
@@ -58,11 +59,11 @@ const plugin: tstl.Plugin = {
             const packageRequireAssignToImportMap = tstl.createVariableDeclarationStatement(tstl.createIdentifier(importMapName), tstl.createIdentifier(`Package.Require("${targetModulePath}")`))
 
             // Named imports
-            const finalNamedImportsVariables = [...nodeRepr.namedImports ?? [], nodeRepr.defaultImport].map((moduleImportClause) => {
+            const finalNamedImportsVariables: VariableDeclarationStatement[] = [...nodeRepr.namedImports ?? [], nodeRepr.defaultImport].map((moduleImportClause) => {
                 // console.log("Processing : ", moduleImportClause)
                 if (!moduleImportClause) return;
                 return tstl.createVariableDeclarationStatement(tstl.createIdentifier(moduleImportClause.importVarName), tstl.createIdentifier(importMapName + "." + moduleImportClause.exportedName))
-            }).reduce((acc, v) => v ? [...acc, v] : acc, [])
+            })?.reduce((acc, v) => v ? [...acc, v] : acc, [] as VariableDeclarationStatement[])
 
             // console.log("Final ", finalNamedImportsVariables)
             return [packageRequireAssignToImportMap, ...finalNamedImportsVariables];

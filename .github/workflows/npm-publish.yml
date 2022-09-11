@@ -27,7 +27,7 @@ jobs:
           message: "Bumping patch version after successful build"
 
   publish-npm:
-    needs: commit-version
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

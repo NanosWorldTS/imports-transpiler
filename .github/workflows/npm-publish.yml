@@ -15,9 +15,19 @@ jobs:
           node-version: 16
       - run: npm --verbose install
       - run: npm run build
+      - run: npm version patch
+
+  commit-version:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: "Bumping patch version after successful build"
+
 
   publish-npm:
-    needs: build
+    needs: commit-version
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

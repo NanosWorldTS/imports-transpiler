@@ -1,6 +1,6 @@
 {
   "name": "nanosts-imports-transpiler",
-  "version": "0.0.3",
+  "version": "0.0.4-0",
   "description": "A compiler plugin for tstl to make NanosWorld imports work",
   "main": "dist/index.js",
   "scripts": {

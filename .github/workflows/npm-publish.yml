@@ -9,6 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Build and bump version
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
@@ -16,15 +17,10 @@ jobs:
       - run: npm --verbose install
       - run: npm run build
       - run: npm version patch --no-git-tag-version
-
-  commit-version:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: EndBug/add-and-commit@v9
+      - name: Commit build
+        uses: EndBug/add-and-commit@v9
         with:
           message: "Bumping patch version after successful build"
-
 
   publish-npm:
     needs: commit-version
